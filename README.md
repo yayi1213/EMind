@@ -1,54 +1,70 @@
-# Emotion Recognition System (CV + LLM starter)
+# EMind — CV + LLM Emotion Recognition System
 
-This is a full-stack starter project for a real-time emotion recognition system using:
+## Team Members
+- YaYi Lin (@yayi1213)
+- Jasmine Gau (@jasminegau)
+- Garrett Smith
 
-- FastAPI backend (Python) to receive frames and analyze emotions using DeepFace.
-- Vue 3 + Vite frontend that captures webcam frames and streams them over WebSocket.
-- A simple LLM "placeholder" integration in the backend for enhanced summaries (replace with your LLM of choice).
+## Project Title
+EMind — An emotion-recognition system combining computer vision (CV) with an LLM for contextual summarization.
 
-What is included
-- `backend/` - FastAPI app, processor, requirements, Dockerfile
-- `frontend/` - Vite + Vue 3 app with webcam capture and WebSocket client
-- `README.md` - this file
+## Short summary (problem & solution)
+Problem:
+Individuals with ADHD often experience fluctuating attention levels and emotional dysregulation during computer use or study sessions.
+However, real-time systems that can recognize these subtle emotional and attentional changes are rare, and developing an AI model that combines visual signals with meaningful feedback requires complex integration of computer vision and language models.
 
-Quick start (PowerShell)
+Solution:
+EMind offers a lightweight, real-time system that analyzes facial expressions and gaze behavior to infer emotional states and concentration levels in ADHD users.
+The backend (FastAPI + DeepFace + OpenCV) detects facial cues such as eye openness, brow tension, and gaze stability, while an integrated LLM generates natural-language summaries and personalized improvement suggestions (e.g., “You seem tired — try a short break or hydration”).
+A built-in `DEMO_MODE` allows quick testing without heavy ML dependencies, making EMind both research-ready and accessible for mental-health-focused HCI applications.
 
-1) Backend (Python)
+## How AI is used
+- Computer vision (DeepFace / OpenCV): detect faces and estimate emotion scores (happy, sad, angry, surprised, etc.). The backend analyzer lives in `backend/app/processor.py`.
+- LLM (OpenAI or other providers): summarize findings and generate a human-readable message or recommendations from the raw CV output. LLM configuration is in `backend/app/config.py` and the summarizer is in `backend/app/processor.py`.
 
-# create a venv and install
-python -m venv .venv; .\.venv\Scripts\Activate.ps1
+Notes:
+- The repo supports a `DEMO_MODE` that returns synthetic or template outputs so the frontend/demo can be tested without installing heavy ML packages (useful for quick testing or CI).
+
+## Key files (what to focus on)
+If the repo isn't fully polished yet, start with these files to understand and extend the system:
+- `backend/app/main.py` — FastAPI application, endpoints (`/analyze`, `/ws`) and static demo routing.
+- `backend/app/processor.py` — core image decode + emotion analysis + optional LLM summarization.
+- `backend/app/config.py` — environment-driven settings for LLM provider and keys.
+- `backend/run_analysis_example.py` — small script to test the analyzer locally.
+- `frontend/src/App.vue` — main Vue app and UI for sending images/frames to the backend.
+- `frontend/static_index.html` & `frontend/static_client.js` — minimal no-Node demo client (served by backend at `/`).
+
+## Quick run (development)
+1. Backend: create and activate a Python 3.11 venv, install `requirements.txt`, then run uvicorn (example shown assumes Windows PowerShell and the repo root):
+
+```powershell
+# create venv (if needed)
+python -m venv .venv311
+.\.venv311\Scripts\Activate.ps1
 pip install -r backend/requirements.txt
-
 # run backend
-python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+```
 
-2) Frontend (Node)
+2. Frontend (optional, requires Node/npm):
 
-# from project root
+```powershell
 cd frontend
 npm install
 npm run dev
-
-Open the frontend dev server shown by vite (usually http://localhost:5173). The frontend connects to the backend WebSocket at ws://localhost:8000/ws by default.
-
-Notes
-
-No-Node quick start (run without installing Node/npm)
--------------------------------------------------
-If you don't have Node installed, you can still run a minimal demo using only Python.
-
-1) Start the backend (follow venv + install steps above). Then run:
-
-```powershell
-python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-2) Open your browser to http://localhost:8000/ — the backend will serve a static demo page that captures your webcam and streams frames to the server over WebSocket. This is useful for quick testing without building the Vue app.
+3. Static demo (no Node): open `http://127.0.0.1:8000/` after backend is running — it serves `frontend/static_index.html` and `static_client.js` for quick demos.
 
-When you're ready to use the full Vue 3 frontend, install Node and run the frontend dev server as described earlier.
+## Notes & next steps
+- If you want the full CV pipeline, use Python 3.11 and install `opencv-python-headless`, `tensorflow-cpu`, and `deepface` (these are large; use `DEMO_MODE` to skip them during development).
+- To enable LLM summarization, set environment variables in `backend/app/config.py` (e.g., `PROVIDER` and `OPENAI_API_KEY`).
+- Consider adding a GitHub Actions workflow to run lightweight tests (or `DEMO_MODE` tests) on push.
 
-Security
-- This starter is for local development and demos. Add authentication, rate limits, and CORS rules for production.
+If you'd like, I can:
+- Run the analysis example inside the created `.venv311` and paste output here.
+- Add a short contributor / development checklist to this README.
+- Create a simple GitHub Actions workflow that runs `backend/run_analysis_test_fallback.py` in `DEMO_MODE` on PRs.
 
-License
-- MIT
+---
+Updated README to give reviewers and contributors a quick orientation. (Files referenced above are in the repository root.)
