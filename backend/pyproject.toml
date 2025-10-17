@@ -1,0 +1,4 @@
+[tool.poetry]
+name = "emotion-backend"
+version = "0.1.0"
+description = ""

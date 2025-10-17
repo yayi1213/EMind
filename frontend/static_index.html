@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emotion Recognition Static Demo</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;padding:16px}video{border:1px solid #ccc}</style>
+</head>
+<body>
+  <h1>Emotion Recognition — Static Demo</h1>
+  <video id="video" autoplay playsinline width="640" height="480"></video>
+  <div style="margin-top:10px">
+    <button id="startCam">Start Camera</button>
+    <button id="startStream">Start Stream</button>
+    <button id="stopStream">Stop Stream</button>
+  </div>
+  <h3>Last server result</h3>
+  <pre id="result">(none)</pre>
+  <script src="/static/static_client.js"></script>
+</body>
+</html>
